@@ -1,89 +1,14 @@
-<?php 
+<!DOCTYPE html>
+<html lang="en-GB">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1">
+		<title>JSON powered eCommerce demo</title>
+	</head>
 
-/*
-Template Name: Homepage
- */
+	<body>
+		<div id="products"></div>
 
-include_once($_SERVER['DOCUMENT_ROOT'].'/store/app/Mage.php');
-umask(0);
-Mage::app()->loadAreaPart(Mage_Core_Model_App_Area::AREA_FRONTEND,Mage_Core_Model_App_Area::PART_EVENTS);
-
-/* 
-
-
-=== PRODUCT TYPES ===
-
-+ simple
-+ configurable
-+ grouped
-+ virtual
-+ bundle
-+ downloadable
-
-
-=== GROUP TYPES ===
-
-0 - Not Logged In
-1 - General
-2 - Wholesale
-3 - 
-4 - VIP member
-5 - Private Sales Member
-
-
-*/
-
-$group_id = Mage::getSingleton('customer/session')->getCustomerGroupId();
-
-//build_product(array('product_type' => 'simple'));
-
-//$product_data = get_product(array('product_type' => 'simple'));
-
-//print_r($product_data); 
-
-get_header(); ?>
-
-<?php if ($product_data): ?>
-
-	<?php foreach($product_data as $data): ?>
-
-		<?php if (get_status($data->entity_id) == 1): ?>
-
-		<form id="product_form_<?php echo $data->entity_id; ?>" method="POST" action="/process-add-to-cart.php">
-
-			<img src="<?php echo THEME_URL.'/scripts/timthumb.php?src='.PRODUCT_IMAGE_DIR.$data->small_image; ?>&w=100" alt="<?php echo $data->name; ?>" title="<?php echo $data->name; ?>" border="0" width="100"/>
-
-			<h2><?php echo $data->name; ?></h2>
-
-			<p><?php echo $data->short_description; ?></p>
-
-			<?php $price = get_price($data->entity_id,$group_id); ?>
-
-			<?php if ($price['savings']): ?>
-			<span class="old-price" style="color: #a0a0a0; text-decoration: line-through;"><?php echo $price['original_price']; ?></span>
-			<p style="color:red">Save <?php echo $price['savings']; ?></p>
-			<?php endif; ?>
-
-			<h3><?php echo $price['price']; ?></h3>
-
-			<p><a href="/product/<?php echo $data->url_key; ?>">View</a></p>
-
-			<input type="hidden" name="product_id" value="<?php echo $data->entity_id; ?>"/>
-
-			<button id="btn_<?php echo $data->entity_id; ?>" class="add-to-cart" type="submit">Add</button>
-
-		</form>
-
-		<hr>
-
-		<?php endif; ?>
-
-	<?php endforeach; ?>
-
-<?php endif; ?>
-
-<div id="products">
-
-</div>
-
-<?php get_footer(); ?>
+		<script src="script.js"></script>
+	</body>
+</html>
