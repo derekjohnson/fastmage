@@ -1,4 +1,5 @@
 var helper = (function(win, doc, undefined) {
+
 	// http://www.quirksmode.org/js/xmlhttp.html
 	return {
 		sendRequest: function(url,callback,postData) {
@@ -24,12 +25,13 @@ var helper = (function(win, doc, undefined) {
 
 	function createXMLHTTPObject() {
 
-	var XMLHttpFactories = [
-		function () {return new XMLHttpRequest()},
-		function () {return new ActiveXObject("Msxml2.XMLHTTP")},
-		function () {return new ActiveXObject("Msxml3.XMLHTTP")},
-		function () {return new ActiveXObject("Microsoft.XMLHTTP")}
-	];
+		var XMLHttpFactories = [
+			function () {return new XMLHttpRequest()},
+			function () {return new ActiveXObject("Msxml2.XMLHTTP")},
+			function () {return new ActiveXObject("Msxml3.XMLHTTP")},
+			function () {return new ActiveXObject("Microsoft.XMLHTTP")}
+		];
+
 		var xmlhttp = false,
 			i,
 			ii = XMLHttpFactories.length;
@@ -45,6 +47,7 @@ var helper = (function(win, doc, undefined) {
 		}
 		return xmlhttp;
 	}
+
 }(this, this.document));
 
 
@@ -153,7 +156,7 @@ var helper = (function(win, doc, undefined) {
 		}
 	}
 
-	helper.sendRequest('simple.json', populate);
+	helper.sendRequest('simple.json', populate, true);
 
 }(this, this.document));
 
