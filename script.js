@@ -7,18 +7,15 @@ var helper = (function(win, doc, undefined) {
 				var req = new XMLHttpRequest();
 
 				if(!req) {
-					console.log('no req');
 					return;
 				}
 
 				req.onreadystatechange = function() {
 					if(req.readyState !== 4) {
-						//console.log(req.readyState);
 						return;
 					}
 
 					if(req.status !== 200) {
-						console.log(req.status);
 						return;
 					}
 
@@ -63,14 +60,14 @@ var helper = (function(win, doc, undefined) {
 
 				item.method = 'post';
 				item.action = '/';
-				item.id = 'product_form_' + product['entity_id'];
+				item.id = 'product_form_' + product.entity_id;
 
 
 				/* Image
 				   ========================================================================== */
 				var item_img = doc.createElement('img');
 
-				item_img.src = 'images' + product['small_image'];
+				item_img.src = 'images' + product.small_image;
 				item_img.alt = product.name;
 				item_img.width = 100;
 
@@ -81,7 +78,7 @@ var helper = (function(win, doc, undefined) {
 				   ========================================================================== */
 				var title = doc.createElement('h1');
 
-				title.textContent = product['name'];
+				title.textContent = product.name;
 
 				item.appendChild(title);
 
@@ -90,7 +87,7 @@ var helper = (function(win, doc, undefined) {
 				   ========================================================================== */
 				var desc = doc.createElement('p');
 
-				desc.textContent = product['short_description'];
+				desc.textContent = product.short_description;
 
 				item.appendChild(desc);
 
@@ -100,7 +97,7 @@ var helper = (function(win, doc, undefined) {
 				var link = doc.createElement('p'),
 					anchor = doc.createElement('a');
 
-				anchor.href = product['url_key'];
+				anchor.href = product.url_key;
 				anchor.textContent = 'View';
 
 				link.appendChild(anchor);
@@ -114,7 +111,7 @@ var helper = (function(win, doc, undefined) {
 
 				id.setAttribute('type', 'hidden');
 				id.name = 'product_id';
-				id.value = product['entity_id'];
+				id.value = product.entity_id;
 
 				item.appendChild(id);
 
@@ -123,7 +120,7 @@ var helper = (function(win, doc, undefined) {
 				   ========================================================================== */
 				var button = doc.createElement('button');
 
-				button.id = 'btn_' + product['entity_id'];
+				button.id = 'btn_' + product.entity_id;
 				button.className = 'add-to-cart';
 				button.setAttribute('type', 'submit');
 				button.textContent = 'Add';
@@ -144,6 +141,6 @@ var helper = (function(win, doc, undefined) {
 		}
 	};
 
-	helper.makeRequest('simple.json', populate, 'POST');
+	helper.makeRequest('simple.json', populate, 'GET');
 
 }(this, this.document));
