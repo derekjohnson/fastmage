@@ -1,52 +1,38 @@
 var helper = (function(win, doc, undefined) {
+	'use strict';
 
-	// http://www.quirksmode.org/js/xmlhttp.html
 	return {
-		sendRequest: function(url,callback,postData) {
-			var req = createXMLHTTPObject();
-			if (!req) return;
-			var method = (postData) ? "POST" : "GET";
-			req.open(method,url,true);
-			//req.setRequestHeader('User-Agent','XMLHTTP/1.0');
-			if (postData)
-				req.setRequestHeader('Content-type','application/x-www-form-urlencoded');
-			req.onreadystatechange = function () {
-				if (req.readyState != 4) return;
-				if (req.status != 200 && req.status != 304) {
-		//		  alert('HTTP error ' + req.status);
+		makeRequest: function(url, fn, method) {
+			if(win.XMLHttpRequest) {
+				var req = new XMLHttpRequest();
+
+				if(!req) {
+					console.log('no req');
 					return;
 				}
-				callback(req);
+
+				req.onreadystatechange = function() {
+					if(req.readyState !== 4) {
+						//console.log(req.readyState);
+						return;
+					}
+
+					if(req.status !== 200) {
+						console.log(req.status);
+						return;
+					}
+
+					fn(req);
+				};
+
+				req.open(method, url);
+				if(method === 'POST') {
+					req.setRequestHeader('Content-Type', 'application/json');
+				}
+				req.send();
 			}
-			if (req.readyState == 4) return;
-			req.send(postData);
 		}
 	};
-
-	function createXMLHTTPObject() {
-
-		var XMLHttpFactories = [
-			function () {return new XMLHttpRequest()},
-			function () {return new ActiveXObject("Msxml2.XMLHTTP")},
-			function () {return new ActiveXObject("Msxml3.XMLHTTP")},
-			function () {return new ActiveXObject("Microsoft.XMLHTTP")}
-		];
-
-		var xmlhttp = false,
-			i,
-			ii = XMLHttpFactories.length;
-
-		for (i=0;i<ii;i++) {
-			try {
-				xmlhttp = XMLHttpFactories[i]();
-			}
-			catch (e) {
-				continue;
-			}
-			break;
-		}
-		return xmlhttp;
-	}
 
 }(this, this.document));
 
@@ -55,6 +41,8 @@ var helper = (function(win, doc, undefined) {
    Build the product list
    ========================================================================== */
 (function(win, doc, undefined) {
+	'use strict';
+
 	var populate = function(req) {
 		var data = JSON.parse(req.response);
 
@@ -154,36 +142,8 @@ var helper = (function(win, doc, undefined) {
 		} else {
 			return;
 		}
-	}
+	};
 
-	helper.sendRequest('simple.json', populate, true);
+	helper.makeRequest('simple.json', populate, 'POST');
 
 }(this, this.document));
-
-/*<form id="product_form_<?php echo $data->entity_id; ?>" method="POST" action="/process-add-to-cart.php">
-
-			<img src="<?php echo THEME_URL.'/scripts/timthumb.php?src='.PRODUCT_IMAGE_DIR.$data->small_image; ?>&w=100" alt="<?php echo $data->name; ?>" title="<?php echo $data->name; ?>" border="0" width="100"/>
-
-			<h2><?php echo $data->name; ?></h2>
-
-			<p><?php echo $data->short_description; ?></p>
-
-			<?php $price = get_price($data->entity_id,$group_id); ?>
-
-			<?php if ($price['savings']): ?>
-			<span class="old-price" style="color: #a0a0a0; text-decoration: line-through;"><?php echo $price['original_price']; ?></span>
-			<p style="color:red">Save <?php echo $price['savings']; ?></p>
-			<?php endif; ?>
-
-			<h3><?php echo $price['price']; ?></h3>
-
-			<p><a href="/product/<?php echo $data->url_key; ?>">View</a></p>
-
-			<input type="hidden" name="product_id" value="<?php echo $data->entity_id; ?>"/>
-
-			<button id="btn_<?php echo $data->entity_id; ?>" class="add-to-cart" type="submit">Add</button>
-
-		</form>
-
-		<hr>
-*/
