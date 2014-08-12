@@ -3,7 +3,7 @@ var helper = (function(win, doc, undefined) {
 
 	return {
 		makeRequest: function(url, fn, method) {
-			if(win.XMLHttpRequest && 'classList' in doc.createElement('a')) {
+			if(win.XMLHttpRequest) {
 				var req = new XMLHttpRequest();
 
 				if(!req) {
@@ -143,6 +143,8 @@ var helper = (function(win, doc, undefined) {
 		};
 
 		helper.makeRequest('simple.json', populate, 'GET');
+	} else {
+		// figure out a way for the PHP to run and the client to make a request
 	}
 
 }(this, this.document));
